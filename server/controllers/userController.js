@@ -1,10 +1,10 @@
 const { models } = require('../models/sequelize_connect');
 const { users } = models;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 function generateJwt(id) {
-  return jwt.sign({ id }, 'secretKey', { expiresIn: '1h' });
+  return jwt.sign({ id }, process.env.DB_TOKEN , { expiresIn: '1h' });
 }
 
 class UserController {
@@ -18,7 +18,7 @@ class UserController {
         middle_name: data.middle_name,
         login: data.login,
         password_hash: hashedPassword,
-        supervisor_id: data.supervisor_id // связь с руководителем
+        supervisor_id: data.supervisor_id
       });
       return newUser;
     } catch (error) {
@@ -32,8 +32,8 @@ class UserController {
     try {
       const usersAll = await users.findAll({...filter,
         include: [
-          { model: users, as: 'supervisor'},   // Руководитель пользователя
-          { model: users, as: 'subordinates'}  // Подчиненные пользователя
+          { model: users, as: 'supervisor'},   // Руководитель
+          { model: users, as: 'subordinates'}  // Подчиненные
         ]
       });
       if (!usersAll) {
@@ -51,8 +51,8 @@ class UserController {
     try {
       const singleUser = await users.findByPk(id, {
         include: [
-          { model: users, as: 'supervisor' },   // Руководитель пользователя
-          { model: users, as: 'subordinates' }  // Подчиненные пользователя
+          { model: users, as: 'supervisor' },   // Руководитель 
+          { model: users, as: 'subordinates' }  // Подчиненные 
         ]
       });
       if (!singleUser) {
@@ -79,8 +79,8 @@ class UserController {
       }
       const updatedUser = await users.findByPk(id, {
         include: [
-          { model: users, as: 'supervisor' },   // Руководитель пользователя
-          { model: users, as: 'subordinates' }  // Подчиненные пользователя
+          { model: users, as: 'supervisor' },   // Руководитель 
+          { model: users, as: 'subordinates' }  // Подчиненные
         ]
       });
       return updatedUser;
@@ -125,22 +125,15 @@ class UserController {
   // Вход пользователя 
   async login(data) {
     try {
-      // Проверяем наличие данных для входа
       if (!data?.login || !data?.password) {
         throw new Error('Не все данные для входа предоставлены');
       }
-  
-      // Поиск пользователя по логину
       const existingUser = await users.findOne({
         where: { login: data.login },
       });
-  
-      // Проверяем существование пользователя
       if (!existingUser) {
         throw new Error('Пользователя с таким логином не существует');
       }
-  
-      // Проверка правильности пароля
       const validPassword = await bcrypt.compare(data.password, existingUser.password_hash);
       if (!validPassword) {
         throw new Error('Неправильный логин или пароль');
@@ -151,19 +144,14 @@ class UserController {
       return { token };
   
     } catch (error) {
-      // Логирование ошибки для отладки
-      console.error("Ошибка при входе пользователя:", error.message);
-  
-      // Обработка известных ошибок с возвратом оригинальных сообщений
+      console.error("Ошибка при входе пользователя:", error.message); 
       if (
         error.message === 'Не все данные для входа предоставлены' ||
         error.message === 'Пользователя с таким логином не существует' ||
         error.message === 'Неправильный логин или пароль'
       ) {
         throw error;
-      }
-  
-      // Обработка непредвиденных ошибок
+      }  
       throw new Error('Непредвиденная ошибка при входе пользователя');
     }
   }
@@ -172,7 +160,7 @@ class UserController {
   // Проверка токена пользователя
   async check(token) {
     try {
-      const decoded = jwt.verify(token, 'secretKey');
+      const decoded = jwt.verify(token, process.env.DB_TOKEN);
       const existingUser = await users.findByPk(decoded.id);
       if (!existingUser) {
         throw new Error('Пользователь не найден');

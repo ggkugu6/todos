@@ -6,11 +6,11 @@ export const getTitleColor = (task) => {
     const isCompleted = task.status?.id === 3 /*выполнено*/;
   
     if (isCompleted) {
-      return 'green'; // завершенные задачи  зеленым цветом
+      return 'green'; 
     } else if (!isCompleted && isOverdue) {
-      return 'red'; // незавершенные задачи с просроченной датой  красный цвет
+      return 'red'; 
     } else {
-      return 'gray'; // остальные задачи  серым цветом
+      return 'gray';
     }
   };
   

@@ -18,6 +18,3 @@ app.use('/api', UserRouter);
 app.use('/api', TaskRouter);
 
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));
-
-const { filterUsersMiddleware, filterTasksMiddleware } = require('./middleware/authMiddleware.js');
-console.log(filterUsersMiddleware)

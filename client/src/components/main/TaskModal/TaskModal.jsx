@@ -77,7 +77,6 @@ const TaskModal = ({ isOpen, onClose, taskId, onSave }) => {
   };
 
   if (loading) {
-    // пока данные не загрузились
     return <div>Загрузка данных...</div>;
   }
 

@@ -30,7 +30,6 @@ export const login = async (login, password) => {
     return jwtDecode(data.token);
   } catch (error) {
     const errorMessage = error.response?.data?.error || "Неизвестная ошибка";
-    console.log(error);
     throw new Error(`Ошибка при входе пользователя: ${errorMessage}`);
   }
 };

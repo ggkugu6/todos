@@ -106,7 +106,6 @@ class TaskController {
         creator_id: data.creator_id || '',
         assignee_id: data.assignee_id
       });
-      console.log(updatedTask);
       return updatedTask;
     } catch (error) {
       console.error(`Ошибка при обновлении задачи с ID ${id}:`, error);

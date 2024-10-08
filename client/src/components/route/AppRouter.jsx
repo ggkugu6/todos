@@ -16,10 +16,6 @@ const AppRouter = observer(() => {
         checkAuth();
     }, [user]);
 
-    if (user.loading) {
-        return <div>Загрузка...</div>;
-    }
-
     // Если нет авторизован или токена
     if (!user.isAuth) {
         return (

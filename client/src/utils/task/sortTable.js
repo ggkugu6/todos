@@ -6,7 +6,6 @@ export const sortData = (tasks, order, orderBy) => {
       const valueA = a[orderBy];
       const valueB = b[orderBy];
   
-      // Проверяем, если это дата
       const isDateA = !isNaN(new Date(valueA).getTime());
       const isDateB = !isNaN(new Date(valueB).getTime());
   
@@ -14,10 +13,9 @@ export const sortData = (tasks, order, orderBy) => {
       const valueToCompareB = isDateB ? new Date(valueB) : valueB;
   
       if (valueToCompareA === undefined || valueToCompareB === undefined) {
-        return 0; // если значения не определены, не сортируем
+        return 0; 
       }
   
-      // Сравнение чисел, строк и дат
       if (order === 'asc') {
         return valueToCompareA < valueToCompareB ? -1 : 1;
       } else {

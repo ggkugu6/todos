@@ -20,7 +20,6 @@ router.get('/tasks', authMiddleware, async (req, res) => {
         // текущий пользователь + его подчинённые
         const userIds = [req.user.id];
         const subordinateIds = [...subordinate, userIds]
-        console.log(userIds, "ываыфвА", subordinateIds)
         const filter = {
             where: {
                 [Op.or]: [

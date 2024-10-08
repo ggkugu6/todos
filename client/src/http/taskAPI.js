@@ -6,7 +6,7 @@ export const createTask = async (task) => {
     return data;
   } catch (error) {
     console.error("Ошибка при создании задачи:", error);
-    throw error;  // Пробрасываем ошибку дальше
+    throw error; 
   }
 };
 

@@ -34,12 +34,12 @@ export default class UserStore {
     // Функция проверки токена и авторизации
     async check() {
         try {
-            const decodedToken = await checkToken();  // Проверяем токен через API
-            this.setUser(decodedToken);  // Устанавливаем пользователя на основе декодированного токена
-            this.setIsAuth(true);  // Пользователь авторизован
+            const decodedToken = await checkToken(); 
+            this.setUser(decodedToken);  
+            this.setIsAuth(true); 
         } catch (error) {
-            this.setIsAuth(false);  // Авторизация не пройдена
-            this.setUser({});  // Очищаем данные пользователя
+            this.setIsAuth(false);  
+            this.setUser({});  
             console.error('Ошибка при проверке токена:', error.message);
         }
     }

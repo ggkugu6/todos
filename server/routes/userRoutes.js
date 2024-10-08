@@ -79,7 +79,6 @@ router.post('/registration', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const result = await userController.login(req.body);
-    console.log(result);
     res.json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });

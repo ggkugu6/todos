@@ -1,0 +1,23 @@
+# Используем базовый образ Node.js для сборки
+FROM node:16 AS build
+WORKDIR /app
+
+# Копируем package.json и package-lock.json для установки зависимостей
+COPY ./package*.json ./
+
+# Устанавливаем зависимости
+RUN npm install
+
+# Копируем все файлы проекта и собираем его
+COPY ./ ./
+RUN npm run build
+
+# Используем минимальный образ NGINX для раздачи собранных файлов
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Открываем порт для NGINX
+EXPOSE 3000
+
+# Запускаем NGINX
+CMD ["nginx", "-g", "daemon off;"]

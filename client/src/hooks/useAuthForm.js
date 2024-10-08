@@ -3,7 +3,7 @@ import { login as loginUser, registration } from "../http/userAPI";
 import { Context } from "..";
 
 export const useAuthForm = () => {
-    const { user } = useContext(Context); // Получаем контекст пользователя
+    const { user } = useContext(Context);
 
     const [formState, setFormState] = useState({
         email: '',

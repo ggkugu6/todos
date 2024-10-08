@@ -11,8 +11,6 @@ async function authMiddleware(req, res, next) {
         if (!token) {
             return res.status(401).json({ error: 'Токен не предоставлен' });
         }
-
-        // Верификация токена
         const decoded = jwt.verify(token, 'secretKey');
         const user = await users.findByPk(decoded.id, {
             include: [{ model: users, as: 'subordinates' }]
