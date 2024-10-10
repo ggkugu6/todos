@@ -3,13 +3,25 @@ import {jwtDecode} from "jwt-decode";
 
 // Регистрация пользователя
 export const registration = async (email, password, login) => {
+  if (!email || !password || !login) {
+    throw new Error("Email, пароль и логин должны быть предоставлены");
+  }
+
   try {
     const { data } = await $host.post('api/registration', { email, password, login });
-    localStorage.setItem('token', data.token);
-    return jwtDecode(data.token);
+
+    if (!data) {
+      throw new Error("Данные отсутствуют");
+    }
+
+    return data;
   } catch (error) {
-    const errorMessage = error.response?.data?.error || "Неизвестная ошибка";
-    throw new Error(`Ошибка при регистрации пользователя: ${errorMessage}`);
+    if (error.response?.data?.error) {
+      throw new Error(`Ошибка при регистрации пользователя: ${error.response.data.error}`);
+    }
+
+    console.error('Ошибка при регистрации пользователя:', error);
+    throw error;
   }
 };
 

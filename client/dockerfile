@@ -3,7 +3,7 @@ FROM node:16 AS build
 WORKDIR /app
 
 # Копируем package.json и package-lock.json для установки зависимостей
-COPY ./package*.json ./
+COPY package*.json ./
 
 # Устанавливаем зависимости
 RUN npm install
@@ -17,7 +17,7 @@ FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Открываем порт для NGINX
-EXPOSE 3000
+EXPOSE 80
 
 # Запускаем NGINX
 CMD ["nginx", "-g", "daemon off;"]

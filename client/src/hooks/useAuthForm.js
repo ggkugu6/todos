@@ -14,6 +14,7 @@ export const useAuthForm = () => {
 
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(''); 
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,18 +34,23 @@ export const useAuthForm = () => {
     const authenticateUser = useCallback(async () => {
         const { isLogin, email, password, username } = formState;
         return isLogin
-            ? loginUser(username, password)  // Логин
-            : registration(email, password, username);  // Регистрация
+            ? loginUser(username, password)  
+            : registration(email, password, username); 
     }, [formState]);
 
     const handleSubmit = async (event) => {
         event?.preventDefault();
         setLoading(true);
         setErrorMessage('');
+        setSuccessMessage('');
         try {
             const data = await authenticateUser();
-            user.setUser(data.user); // Устанавливаем данные пользователя
-            user.setIsAuth(true);  // Устанавливаем аутентификацию
+            if (formState.isLogin) {
+                user.setUser(data.user);
+                user.setIsAuth(true);
+            } else {
+                setSuccessMessage('Регистрация прошла успешно. Пожалуйста, выполните вход.'); 
+            }
         } catch (error) {
             setErrorMessage(error.message || 'Произошла ошибка');
         } finally {
@@ -56,6 +62,7 @@ export const useAuthForm = () => {
         formState,
         loading,
         errorMessage,
+        successMessage,
         isFormValid,
         handleChange,
         handleSubmit,

@@ -106,21 +106,29 @@ class UserController {
     }
   }
 
-  // Регистрация пользователя
-  async registration(data) {
-    try {
-      const existingUser = await users.findOne({
-        where: { login: data.login }
-      });
+// Регистрация пользователя
+async registration(data) {
+  try {
+      // Проверяем, существует ли пользователь с таким логином
+      const existingUser = await users.findOne({ where: { login: data.login } });
+
+      // Если пользователь найден, выбрасываем ошибку
       if (existingUser) {
-        throw new Error('Пользователь с таким логином уже существует');
+          return { error: 'Пользователь с таким логином уже существует' }; // Возвращаем объект с ошибкой
       }
+
+      // Создаем нового пользователя
       return await this.createUser(data);
-    } catch (error) {
-      console.error("Ошибка при регистрации пользователя:", error);
-      throw error;
-    }
+
+  } catch (error) {
+      // Обрабатываем другие ошибки, например, связанные с базой данных
+      console.error("Ошибка при регистрации пользователя:", error.message);
+      throw new Error("Произошла ошибка при регистрации. Пожалуйста, попробуйте снова.");
   }
+}
+
+
+
 
   // Вход пользователя 
   async login(data) {
