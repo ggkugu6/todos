@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const $host = axios.create({
-  baseURL: 'http://localhost:8082',
+  baseURL: 'https://rational-phaidra-andrey-198dd5cf.koyeb.app' || 'http://localhost:8082' || 'http://192.168.1.100:8082',
 });
 
 const authInterceptor = config => {

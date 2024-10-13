@@ -1,41 +1,38 @@
-services:
-  # Сервер Node.js
-  server:
-    build:
-      context: server
-      dockerfile: dockerfile
-    ports:
-      - "8082:8082"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: andrey
-      POSTGRES_DB: todos
-      DATABASE_URL: postgres://postgres:andrey@db:5432/todos
-    depends_on:
-      - db
+version: '3.8'
 
-  # Клиент (React.js)
-  client:
-    build: ./client
+services:
+  nginx:
+    image: nginx:alpine
     ports:
       - "80:80"
     depends_on:
+      - client
       - server
-
-  # База данных PostgreSQL
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: andrey
-      POSTGRES_DB: todos
-      PGDATA: /var/lib/postgresql/data/pgdata
-    ports:
-      - "5432:5432"
     volumes:
-      - ./data:/var/lib/postgresql/data
-      - C:/Users/Андрей/Downloads/pg:/backup
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf 
+    networks:
+      - my-todos-network
 
-# Определение тома для хранения данных PostgreSQL
-volumes:
-  todos-db-1:
+  # Клиентское приложение (React.js)
+  client:
+    image: andrey522526/my-todos-app:client-v3
+    expose:
+      - "80"  
+    networks:
+      - my-todos-network
+
+  # Сервер Node.js
+  server:
+    image: andrey522526/my-todos-app:servvv  
+    expose:
+      - "8082" 
+    environment:
+      POSTGRES_USER: koyeb-adm
+      POSTGRES_PASSWORD: rlDEB2V7QCdX
+      POSTGRES_DB: todos
+      DATABASE_URL: postgres://koyeb-adm:rlDEB2V7QCdX@ep-damp-wave-a22ezu5j.eu-central-1.pg.koyeb.app/todos
+    networks:
+      - my-todos-network
+
+networks:
+  my-todos-network:

@@ -1,0 +1,20 @@
+FROM postgres:16-alpine
+
+
+# Устанавливаем переменные окружения для PostgreSQL
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=andrey
+ENV POSTGRES_DB=todos
+
+# Копируем файл дампа в папку инициализации
+COPY ./pg_backup.sql /docker-entrypoint-initdb.d/
+
+# Добавляем команду для восстановления базы данных после запуска PostgreSQL
+RUN chmod +x /docker-entrypoint-initdb.d/
+
+# Этот скрипт выполнится при запуске контейнера
+CMD ["bash", "-c", "docker-entrypoint.sh postgres && pg_restore --username=$POSTGRES_USER --dbname=$POSTGRES_DB /docker-entrypoint-initdb.d/pg_backup.sql"]
+# docker  exec quizzical_taussig  psql  postgres -d todos
+# CMD ["bash", "-c", "if [ -f /docker-entrypoint-initdb.d/pg_backup.sql ]; then docker-entrypoint.sh postgres && pg_restore --username=$POSTGRES_USER --dbname=$POSTGRES_DB /docker-entrypoint-initdb.d/pg_backup.sql; fi"]
+# CMD ["bash", "-c", "docker-entrypoint.sh postgres && pg_restore --username=$POSTGRES_USER --dbname=$POSTGRES_DB /docker-entrypoint-initdb.d/pg_backup.sql"]
+# docker exec -it 30abf86161cc3ad93eaa103755be99ddb0bd5fef1948789f5c27741545b844cd bash
