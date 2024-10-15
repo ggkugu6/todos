@@ -4,7 +4,7 @@
 ## Ссылка на демонстрацию (https://rational-phaidra-andrey-198dd5cf.koyeb.app/)
 Приложение развернуто на Koyeb, инициализация приложения в репозитории (https://github.com/ggkugu6/todos_docker)
 Собран из 2-х докер образов server и client + БД в koyeb (создан из дамба pg_backup.sql)
-## логин email454 ,  пароль andrey12
+## логин email454 ,  пароль andrey12 (чтоб протестить приложение, у данного пользователя есть подчиненные и руководитель) 
 ## Connection DATABASE
     DATABASE_HOST=ep-damp-wave-a22ezu5j.eu-central-1.pg.koyeb.app
     DATABASE_USER=koyeb-adm
